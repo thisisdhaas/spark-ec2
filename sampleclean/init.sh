@@ -77,8 +77,8 @@ else
     rm matplotlib-1.4.0.tar.gz
     tar czf matplotlib-1.4.0.tar.gz matplotlib-1.4.0
     pip install matplotlib-1.4.0.tar.gz
-    rm matplotlib-1.4.0.tar.gz
-    rm -rf matplotlib-1.4.0
+    #rm matplotlib-1.4.0.tar.gz
+    #rm -rf matplotlib-1.4.0
     echo " Done!"
 
     # and the rest of the python packages
