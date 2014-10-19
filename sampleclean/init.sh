@@ -17,12 +17,10 @@ then
   echo ""
 else
     # clone the sampleclean git repo
-    echo "\n\tInstalling sampleclean repo..."
     git clone https://github.com/sjyk/sampleclean-async.git
-    echo " Done!"
 
     # install postgres
-    echo "\n\t Setting up postgres..."
+    echo "Setting up postgres..."
     yum install -y postgresql92-server
 
     # Initialize the db on a big ephemeral drive
@@ -41,19 +39,17 @@ else
     # Create the database and user
     sudo -u postgres createuser --superuser sampleclean
     createdb -O sampleclean -U sampleclean sampleclean
-    echo " Done!"
 
     # Install rabbitmq and dependencies
-    echo "\n\t Setting up rabbitmq..."
+    echo "Setting up rabbitmq..."
     yum install -y erlang
     wget http://www.rabbitmq.com/releases/rabbitmq-server/v3.3.5/rabbitmq-server-3.3.5-1.noarch.rpm
     rpm --import http://www.rabbitmq.com/rabbitmq-signing-key-public.asc
     yum install -y rabbitmq-server-3.3.5-1.noarch.rpm
     rm rabbitmq-server-3.3.5-1.noarch.rpm
-    echo " Done!"
 
     # Install python2.7 and create a virtualenv
-    echo "\n\t Setting up python virtualenv..."
+    echo "Setting up python virtualenv..."
     yum install -y python27 python27-devel
     wget wget https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py -O - | python27
     easy_install-2.7 pip
@@ -65,11 +61,11 @@ else
     source /root/.bash_profile
     mkvirtualenv sampleclean
     workon sampleclean
-    echo " Done!"
 
     # Install python requirements
-    echo "\n\t Installing matplotlib..."
+    echo "Installing matplotlib..."
     yum install -y libpng-devel
+    yum install -y freetype-devel
     # Crazy hacks to get matplotlib working
     pip install --download . matplotlib==1.4.0 # this will fail to build, but download successfully
     tar xzf matplotlib-1.4.0.tar.gz
@@ -79,14 +75,12 @@ else
     pip install matplotlib-1.4.0.tar.gz
     #rm matplotlib-1.4.0.tar.gz
     #rm -rf matplotlib-1.4.0
-    echo " Done!"
 
     # and the rest of the python packages
-    echo "\n\t Installing remaining python requirements..."
+    echo "Installing remaining python requirements..."
     pushd sampleclean-async/src/main/python/crowd_server
     pip2.7 install -r requirements.txt
     popd
-    echo " Done!"
 fi
 
 # Pre-package tachyon version
