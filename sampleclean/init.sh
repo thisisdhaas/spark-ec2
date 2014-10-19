@@ -17,9 +17,12 @@ then
   echo ""
 else
     # clone the sampleclean git repo
+    echo "\n\tInstalling sampleclean repo..."
     git clone https://github.com/sjyk/sampleclean-async.git
+    echo " Done!"
 
     # install postgres
+    echo "\n\t Setting up postgres..."
     yum install -y postgresql92-server
 
     # Initialize the db on a big ephemeral drive
@@ -37,14 +40,18 @@ else
     # Create the database and user
     sudo -u postgres createuser --superuser sampleclean
     createdb -O sampleclean -U sampleclean sampleclean
+    echo " Done!"
 
     # Install rabbitmq and dependencies
+    echo "\n\t Setting up rabbitmq..."
     yum install -y erlang
     wget http://www.rabbitmq.com/releases/rabbitmq-server/v3.3.5/rabbitmq-server-3.3.5-1.noarch.rpm
     rpm --import http://www.rabbitmq.com/rabbitmq-signing-key-public.asc
     yum install -y rabbitmq-server-3.3.5-1.noarch.rpm
+    echo " Done!"
 
     # Install python2.7 and create a virtualenv
+    echo "\n\t Setting up python virtualenv..."
     yum install -y python27 python27-devel
     wget wget https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py -O - | python27
     easy_install-2.7 pip
@@ -54,8 +61,10 @@ else
     mkvirtualenv sampleclean
     workon sampleclean
     popd
+    echo " Done!"
 
     # Install python requirements
+    echo "\n\t Installing matplotlib..."
     pushd sampleclean-async/src/main/python/crowd_server
     yum install -y libpng-devel
     # Crazy hacks to get matplotlib working
@@ -65,9 +74,13 @@ else
     rm matplotlib-1.4.0.tar.gz
     tar czf matplotlib-1.4.0.tar.gz matplotlib-1.4.0
     pip install matplotlib-1.4.0.tar.gz
+    echo " Done!"
 
     # and the rest of the python packages
+    echo "\n\t Installing remaining python requirements..."
     pip2.7 install -r requirements.txt
+    popd
+    echo " Done!"
 fi
 
 # Pre-package tachyon version
