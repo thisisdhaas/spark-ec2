@@ -22,6 +22,7 @@ else
     # install postgres
     echo "Setting up postgres..."
     yum install -y postgresql92-server
+    yum install -y postgresql92-devel
 
     # Initialize the db on a big ephemeral drive
     export PGDATA=/mnt/sampleclean/data/
