@@ -38,10 +38,6 @@ else
     #chkconfig postgresql92 on
     sudo -E -u postgres pg_ctl start
 
-    # Create the database and user
-    sudo -u postgres createuser --superuser sampleclean
-    createdb -O sampleclean -U sampleclean sampleclean
-
     # Install rabbitmq and dependencies
     echo "Setting up rabbitmq..."
     yum install -y erlang
@@ -88,6 +84,8 @@ else
     rm basecrowd/fixtures/initial_data.json
 
     # Prepare the database
+    sudo -u postgres createuser --superuser sampleclean
+    sudo -u postgres createdb -O sampleclean -U sampleclean sampleclean
     ./reset_db.sh
     popd
 
