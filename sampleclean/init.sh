@@ -31,11 +31,12 @@ else
     # Fix the authentication configuration
     pushd /root/spark-ec2/sampleclean
     cp pg_hba.conf /var/lib/pgsql92/data/pg_hba.conf
+    # cp pg_hba.conf /mnt/sampleclean/data/pg_hba.conf
     popd
 
     # Start postgres
-    chkconfig postgresql92 on
-    service postgresql92 start
+    #chkconfig postgresql92 on
+    sudo -E -u postgres pg_ctl start
 
     # Create the database and user
     sudo -u postgres createuser --superuser sampleclean
@@ -48,6 +49,7 @@ else
     rpm --import http://www.rabbitmq.com/rabbitmq-signing-key-public.asc
     yum install -y rabbitmq-server-3.3.5-1.noarch.rpm
     rm rabbitmq-server-3.3.5-1.noarch.rpm
+    rabbitmq-server -detached # run the server.
 
     # Install python2.7 and create a virtualenv
     echo "Setting up python virtualenv..."
@@ -74,37 +76,20 @@ else
     rm matplotlib-1.4.0.tar.gz
     tar czf matplotlib-1.4.0.tar.gz matplotlib-1.4.0
     pip install matplotlib-1.4.0.tar.gz
-    #rm matplotlib-1.4.0.tar.gz
-    #rm -rf matplotlib-1.4.0
+    rm matplotlib-1.4.0.tar.gz
+    rm -rf matplotlib-1.4.0
 
     # and the rest of the python packages
     echo "Installing remaining python requirements..."
     pushd sampleclean-async/src/main/python/crowd_server
     pip2.7 install -r requirements.txt
+
+    # no need for the sites fixture
+    rm basecrowd/fixtures/initial_data.json
+
+    # Prepare the database
+    ./reset_db.sh
     popd
+
 fi
-
-# Pre-package tachyon version
-#else
-#  case "$TACHYON_VERSION" in
-#    0.3.0)
-#      wget https://s3.amazonaws.com/Tachyon/tachyon-0.3.0-bin.tar.gz
-#      ;;
-#    0.4.0)
-#      wget https://s3.amazonaws.com/Tachyon/tachyon-0.4.0-bin.tar.gz
-#      ;;
-#    0.4.1)
-#      wget https://s3.amazonaws.com/Tachyon/tachyon-0.4.1-bin.tar.gz
-#      ;;
-#    *)
-#      echo "ERROR: Unknown Tachyon version"
-#      return -1
-#  esac
-
-#  echo "Unpacking Tachyon"
-#  tar xvzf tachyon-*.tar.gz > /tmp/spark-ec2_tachyon.log
-#  rm tachyon-*.tar.gz
-#  mv `ls -d tachyon-*` tachyon
-#fi
-
 popd
