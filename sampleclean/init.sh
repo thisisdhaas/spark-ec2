@@ -24,19 +24,10 @@ else
     yum install -y postgresql92-server
     yum install -y postgresql92-devel
 
-    # Initialize the db on a big ephemeral drive
-    export PGDATA=/mnt/sampleclean/data/
-    sudo -E -u postgres initdb92
-
     # Fix the authentication configuration
     pushd /root/spark-ec2/sampleclean
     cp pg_hba.conf /var/lib/pgsql92/data/pg_hba.conf
-    # cp pg_hba.conf /mnt/sampleclean/data/pg_hba.conf
     popd
-
-    # Start postgres
-    #chkconfig postgresql92 on
-    sudo -E -u postgres pg_ctl start
 
     # Install rabbitmq and dependencies
     echo "Setting up rabbitmq..."
@@ -45,7 +36,6 @@ else
     rpm --import http://www.rabbitmq.com/rabbitmq-signing-key-public.asc
     yum install -y rabbitmq-server-3.3.5-1.noarch.rpm
     rm rabbitmq-server-3.3.5-1.noarch.rpm
-    rabbitmq-server -detached # run the server.
 
     # Install python2.7 and create a virtualenv
     echo "Setting up python virtualenv..."
@@ -82,12 +72,6 @@ else
 
     # no need for the sites fixture
     rm basecrowd/fixtures/initial_data.json
-
-    # Prepare the database
-    sudo -u postgres createuser --superuser sampleclean
-    sudo -u postgres createdb -O sampleclean -U sampleclean sampleclean
-    ./reset_db.sh
     popd
-
 fi
 popd

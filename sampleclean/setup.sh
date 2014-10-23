@@ -1,9 +1,18 @@
 #!/bin/bash
 
-#/root/spark-ec2/copy-dir /root/tachyon
+# Initialize the db on a big ephemeral drive
+sudo -E -u postgres initdb92
+sudo -E -u postgres pg_ctl start
+sudo -u postgres createuser --superuser sampleclean
+sudo -u postgres createdb -O sampleclean -U sampleclean sampleclean
 
-#/root/tachyon/bin/tachyon format
+# Make sure rabbitmq is running
+rabbitmq-server -detached
 
-#sleep 1
+# Make sure the virtualenv is active
+workon sampleclean
 
-#/root/tachyon/bin/tachyon-start.sh all Mount
+# Set up the sampleclean DB
+pushd $PROJECT_HOME
+./reset_db.sh
+popd
