@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# make sure all of our environment variables are set.
+source /root/.bash_profile
+
 # Initialize the db on a big ephemeral drive
 sudo -E -u postgres initdb92
 sudo -E -u postgres pg_ctl start
