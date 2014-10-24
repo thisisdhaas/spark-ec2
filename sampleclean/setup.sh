@@ -3,6 +3,7 @@
 # Initialize the db on a big ephemeral drive
 sudo -E -u postgres initdb92
 sudo -E -u postgres pg_ctl start
+sleep 4 # let the db start up
 sudo -u postgres createuser --superuser sampleclean
 sudo -u postgres createdb -O sampleclean -U sampleclean sampleclean
 
