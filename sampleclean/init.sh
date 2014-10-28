@@ -37,6 +37,9 @@ else
     yum install -y rabbitmq-server-3.3.5-1.noarch.rpm
     rm rabbitmq-server-3.3.5-1.noarch.rpm
 
+    # Install emacs because it is king.
+    yum install -y emacs
+
     # Install python2.7 and create a virtualenv
     echo "Setting up python virtualenv..."
     yum install -y python27 python27-devel

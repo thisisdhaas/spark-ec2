@@ -16,6 +16,11 @@ rabbitmq-server -detached
 # Make sure the virtualenv is active
 workon sampleclean
 
+# Kill off the hive metastore, in case it had stale information
+if [ -d "/root/sampleclean-async/metastore_db" ]; then
+    rm -rf /root/sampleclean-async/metastore_db
+fi
+
 # Set up the sampleclean DB
 pushd $PROJECT_HOME
 ./reset_db.sh
