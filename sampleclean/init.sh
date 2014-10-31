@@ -17,7 +17,7 @@ then
   echo ""
 else
     # clone the sampleclean git repo
-    git clone https://github.com/sjyk/sampleclean-async.git -b master
+    git clone https://github.com/sjyk/sampleclean-async.git -b ampcampdemo
 
     # install postgres
     echo "Setting up postgres..."
