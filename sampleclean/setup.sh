@@ -13,6 +13,9 @@ sudo -u postgres createdb -O sampleclean -U sampleclean sampleclean
 # Make sure rabbitmq is running
 rabbitmq-server -detached
 
+# Make sure nginx is running
+service nginx restart
+
 # Make sure the virtualenv is active
 workon sampleclean
 

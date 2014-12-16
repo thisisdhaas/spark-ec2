@@ -37,6 +37,23 @@ else
     yum install -y rabbitmq-server-3.3.5-1.noarch.rpm
     rm rabbitmq-server-3.3.5-1.noarch.rpm
 
+    # Install and set up nginx and ssl certificates
+    echo "Setting up nginx..."
+    yum install -y nginx
+    pushd /root/spark-ec2/sampleclean
+    cp nginx.conf /etc/nginx/nginx.conf
+    echo "Setting up ssl certificates..."
+    if [ -f sampleclean1_eecs_berkeley_edu_chained.cer ]; then
+	echo "Production certs found, installing..."
+	cp sampleclean1_eecs_berkeley_edu_chained.cer /etc/pki/tls/certs/sampleclean_chained.cer
+	cp sampleclean1.eecs.berkeley.edu-san.key /etc/pki/tls/certs/sampleclean.key
+    else
+	echo "No production certs found, installing development certs..."
+	cp /root/sampleclean-async/src/main/python/crowd_server/crowd_server/ssl/development.crt /etc/pki/tls/certs/sampleclean_chained.cer
+	cp /root/sampleclean-async/src/main/python/crowd_server/crowd_server/ssl/development.key /etc/pki/tls/certs/sampleclean.key
+    fi
+    popd
+
     # Install emacs because it is king.
     yum install -y emacs
 
