@@ -54,6 +54,18 @@ else
     fi
     popd
 
+    # Install AMT credentials
+    echo "Installing AMT credentials..."
+    pushd /root/spark-ec2/sampleclean
+    AMT_ACCESS_KEY=`cat ~/.ssh/aws/sampleclean/amt_credentials.csv | grep Access | cut -d "=" -f 2`
+    AMT_SECRET_KEY=`cat ~/.ssh/aws/sampleclean/amt_credentials.csv | grep Secret | cut -d "=" -f 2`
+    popd
+    pushd /root/sampleclean-async/src/main/python/crowd_server/crowd_server
+    sed "s/AMT_ACCESS_KEY = 'CHANGEME'/AMT_ACCESS_KEY = '$AMT_ACCESS_KEY'/" < private_settings.py.default > tmp1
+    sed "s/AMT_SECRET_KEY = 'CHANGEME'/AMT_SECRET_KEY = '$AMT_SECRET_KEY'/" < tmp1 > private_settings.py
+    rm tmp1
+    popd
+
     # Install emacs because it is king.
     yum install -y emacs
 
