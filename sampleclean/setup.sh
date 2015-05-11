@@ -7,8 +7,8 @@ source /root/.bash_profile
 sudo -E -u postgres initdb92
 sudo -E -u postgres pg_ctl start
 sleep 4 # let the db start up
-sudo -u postgres createuser --superuser sampleclean
-sudo -u postgres createdb -O sampleclean -U sampleclean sampleclean
+sudo -u postgres createuser --superuser ampcrowd
+sudo -u postgres createdb -O ampcrowd -U ampcrowd ampcrowd
 
 # Make sure rabbitmq is running
 rabbitmq-server -detached
@@ -17,7 +17,7 @@ rabbitmq-server -detached
 service nginx restart
 
 # Make sure the virtualenv is active
-workon sampleclean
+workon ampcrowd
 
 # Kill off the hive metastore, in case it had stale information
 if [ -d "/root/sampleclean-async/metastore_db" ]; then
@@ -26,5 +26,8 @@ fi
 
 # Set up the sampleclean DB
 pushd $PROJECT_HOME
-./reset_db.sh
+scripts/reset_db.sh
 popd
+
+# Run the crowd server
+scripts/run.sh

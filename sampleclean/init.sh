@@ -19,6 +19,9 @@ else
     # clone the sampleclean git repo
     git clone https://github.com/sjyk/sampleclean-async.git -b master
 
+    # clone the ampcrowd git repo
+    git clone https://github.com/amplab/ampcrowd.git -b master
+
     # install postgres
     echo "Setting up postgres..."
     yum install -y postgresql92-server
@@ -60,7 +63,7 @@ else
     AMT_ACCESS_KEY=`cat amt_credentials.csv | grep Access | cut -d "=" -f 2 | tr -d '\r'`
     AMT_SECRET_KEY=`cat amt_credentials.csv | grep Secret | cut -d "=" -f 2 | tr -d '\r'`
     popd
-    pushd /root/sampleclean-async/src/main/python/crowd_server/crowd_server
+    pushd /root/ampcrowd/ampcrowd/crowd_server
     sed "s/AMT_ACCESS_KEY = 'CHANGEME'/AMT_ACCESS_KEY = '$AMT_ACCESS_KEY'/" < private_settings.py.default > tmp1
     sed "s/AMT_SECRET_KEY = 'CHANGEME'/AMT_SECRET_KEY = '$AMT_SECRET_KEY'/" < tmp1 > private_settings.py
     rm tmp1
@@ -72,7 +75,7 @@ else
     # Install python2.7 and create a virtualenv
     echo "Setting up python virtualenv..."
     yum install -y python27 python27-devel
-    wget wget https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py -O - | python27
+    wget https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py -O - | python27
     easy_install-2.7 pip
     pip2.7 install virtualenvwrapper
     rm setuptools-7.0.zip
@@ -80,8 +83,8 @@ else
     cat virtualenv_setup.sh >> /root/.bash_profile
     popd
     source /root/.bash_profile
-    mkvirtualenv sampleclean
-    workon sampleclean
+    mkvirtualenv ampcrowd
+    workon ampcrowd
 
     # Install python requirements
     echo "Installing matplotlib..."
@@ -101,9 +104,6 @@ else
     echo "Installing remaining python requirements..."
     pushd sampleclean-async/src/main/python/crowd_server
     pip2.7 install -r requirements.txt
-
-    # no need for the sites fixture
-    rm basecrowd/fixtures/initial_data.json
     popd
 fi
 popd
