@@ -27,7 +27,7 @@ fi
 # Set up the sampleclean DB
 pushd $PROJECT_HOME
 scripts/reset_db.sh
-popd
 
 # Run the crowd server
 scripts/run.sh
+popd
