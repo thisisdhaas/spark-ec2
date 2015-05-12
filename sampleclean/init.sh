@@ -81,6 +81,7 @@ else
     rm setuptools-7.0.zip
     pushd /root/spark-ec2/sampleclean
     cat virtualenv_setup.sh >> /root/.bash_profile
+    cat hosts >> /etc/hosts
     popd
     source /root/.bash_profile
     mkvirtualenv ampcrowd
